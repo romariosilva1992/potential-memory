@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo 2D</title>
+    <style>
+        #gameCanvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script>
+        // Obtém o elemento canvas e seu contexto
+        var canvas = document.getElementById("gameCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Define as propriedades do jogador
+        var player = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            speed: 5
+        };
+
+        // Função para desenhar o jogador
+        function drawPlayer() {
+            ctx.beginPath();
+            ctx.rect(player.x, player.y, 20, 20);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Função principal de desenho e atualização do jogo
+        function draw() {
+            // Limpa a tela
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Desenha o jogador
+            drawPlayer();
+
+            // Atualiza a posição do jogador
+            if (rightPressed && player.x < canvas.width - 20) {
+                player.x += player.speed;
+            } else if (leftPressed && player.x > 0) {
+                player.x -= player.speed;
+            }
+
+            // Chama a função draw() novamente em breve
+            requestAnimationFrame(draw);
+        }
+
+        // Variáveis para controle de movimento
+        var rightPressed = false;
+        var leftPressed = false;
+
+        // Funções para lidar com eventos de teclado
+        function keyDownHandler(event) {
+            if (event.keyCode === 39) {
+                rightPressed = true;
+            } else if (event.keyCode === 37) {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(event) {
+            if (event.keyCode === 39) {
+                rightPressed = false;
+            } else if (event.keyCode === 37) {
+                leftPressed = false;
+            }
+        }
+
+        // Adiciona os ouvintes de eventos de teclado
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        // Inicia o jogo
+        draw();
+    </script>
+</body>
+</html>
